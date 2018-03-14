@@ -1,13 +1,14 @@
 #coding:utf-8
+import scrapy
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from eastfundsSpider.items import EastfundsspiderItem
 import datetime
-
+import json
 
 class EmSpider(CrawlSpider):
     name='eastmoney'
-    #download_delay = 1
+    download_delay = 1
     allowed_domains=["fund.eastmoney.com"]
     start_urls=[
         "http://fund.eastmoney.com/allfund.html"
@@ -37,15 +38,21 @@ class EmSpider(CrawlSpider):
             threeyearrate=response.xpath(".//*[@id='increaseAmount_stage']/table//tr[2]/td[9]/div/text()").extract()[0]
             category=u'净值型'
             date=datetime.datetime.now().strftime("%Y-%m-%d")
-            print fundname, todayestnav,yestnav,accumnav
+            hangyeurl=response.xpath(".//*[@class='fundDetail-footer']/ul/li[9]/a/@href").extract()[0]
             item=EastfundsspiderItem(fundname=fundname,fundid=fundid,todayestnav=todayestnav,yestnav=yestnav,accumnav=accumnav,category=category,
                                      date=date,weekrate=weekrate,monthrate=monthrate,threemonthrate=threemonthrate,sixmonthrate=sixmonthrate,
                                      fromthisyearrate=fromthisyearrate,yearrate=yearrate,twoyearrate=twoyearrate,threeyearrate=threeyearrate)
-            yield item
+            print hangyeurl
+            request=scrapy.Request(url=hangyeurl,callback=self.parse_hangye)
+            request.meta['item']=item
+            yield request
         elif differetiate==u"每万份收益":
             print u"货币基金"
 
-
+    def parse_hangye(self,response):
+        item=response.meta['item']
+        print 'ok'
+        yield item
 
 
 
