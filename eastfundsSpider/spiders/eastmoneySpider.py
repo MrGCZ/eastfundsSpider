@@ -33,6 +33,7 @@ class EmSpider(CrawlSpider):
             yestnav = response.xpath(".//dl[@class='dataItem02']/dd[@class='dataNums']/span[1]/text()").extract()[0]  # 昨日净值
             accumnav=response.xpath(".//dl[@class='dataItem03']/dd[@class='dataNums']/span[1]/text()").extract()[0] #累计净值
 
+            todayrate=response.xpath(".//*[@id='gz_gszzl']/text()").extract()[0].strip("+").strip('%').replace(' ','0')
             weekrate=response.xpath(".//*[@id='increaseAmount_stage']/table//tr[2]/td[2]/div/text()").extract()[0]
             monthrate=response.xpath(".//*[@id='increaseAmount_stage']/table//tr[2]/td[3]/div/text()").extract()[0]
             threemonthrate=response.xpath(".//*[@id='increaseAmount_stage']/table//tr[2]/td[4]/div/text()").extract()[0]
@@ -47,7 +48,7 @@ class EmSpider(CrawlSpider):
             hangyeurl=response.xpath(".//*[@class='fundDetail-footer']/ul/li[9]/a/@href").extract()[0]
             item=EastfundsspiderItem(fundname=fundname,fundid=fundid,fundtype=fundtype,fundcompany=fundcompany,fundsize=fundsize,
                                      todayestnav=todayestnav,yestnav=yestnav,accumnav=accumnav,
-                                     weekrate=weekrate,monthrate=monthrate,threemonthrate=threemonthrate,sixmonthrate=sixmonthrate,
+                                     todayrate=todayrate,weekrate=weekrate,monthrate=monthrate,threemonthrate=threemonthrate,sixmonthrate=sixmonthrate,
                                      fromthisyearrate=fromthisyearrate,yearrate=yearrate,twoyearrate=twoyearrate,threeyearrate=threeyearrate,
                                      category=category,date=date,
                                      )

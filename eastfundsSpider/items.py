@@ -22,6 +22,7 @@ class EastfundsspiderItem(scrapy.Item):
     accumnav=scrapy.Field()
 
     #收益率
+    todayrate=scrapy.Field()
     weekrate=scrapy.Field()
     monthrate=scrapy.Field()
     threemonthrate=scrapy.Field()

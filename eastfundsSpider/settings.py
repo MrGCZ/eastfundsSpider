@@ -15,6 +15,42 @@ SPIDER_MODULES = ['eastfundsSpider.spiders']
 NEWSPIDER_MODULE = 'eastfundsSpider.spiders'
 
 
+
+############################使csv的item列按顺序输出(设置2）
+FEED_EXPORTERS = {
+    'csv': 'eastfundsSpider.spiders.csv_item_exporter.MyProjectCsvItemExporter',
+}  # eastfundsSpider为工程名
+
+FIELDS_TO_EXPORT = [
+'fundname',
+'fundid',
+'fundtype',
+'fundcompany',
+'fundsize',
+# nav
+'todayestnav',
+'yestnav',
+'accumnav',
+# 收益率
+'todayrate',
+'weekrate',
+'monthrate',
+'threemonthrate',
+'sixmonthrate',
+'fromthisyearrate',
+'yearrate',
+'twoyearrate',
+'threeyearrate',
+# industry
+'industry1',
+'industry1ratio',
+'industry2',
+'industry2ratio',
+'category',
+'date'
+]
+#############################
+
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'eastfundsSpider (+http://www.yourdomain.com)'
 
