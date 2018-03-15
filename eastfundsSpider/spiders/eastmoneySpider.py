@@ -8,7 +8,7 @@ import json
 
 class EmSpider(CrawlSpider):
     name='eastmoney'
-    download_delay = 1
+    #download_delay = 1 #下载延时
     allowed_domains=["fund.eastmoney.com"]
     start_urls=[
         "http://fund.eastmoney.com/allfund.html"
@@ -25,9 +25,14 @@ class EmSpider(CrawlSpider):
         if differetiate==u"净值估算":
             fundname = response.xpath(".//div[@class='fundDetail-tit']/div/text()").extract()[0]
             fundid=response.xpath(".//div[@class='fundDetail-tit']/div//span[@class='ui-num'][1]/text()").extract()[0]
+            fundtype=response.xpath(".//*[@class='infoOfFund']/table//tr[1]/td[1]/a/text()").extract()[0]
+            fundcompany=response.xpath(".//*[@class='infoOfFund']/table//tr[2]/td[2]/a/text()").extract()[0]
+            fundsize=response.xpath(".//*[@class='infoOfFund']/table//tr[1]/td[2]/text()").re(r'\d*\.\d{2}[^\x00-\xff]')[0]   #匹配中文字符
+
             todayestnav = response.xpath(".//*[@id='gz_gsz']/text()").extract()[0]  # 今日估值
             yestnav = response.xpath(".//dl[@class='dataItem02']/dd[@class='dataNums']/span[1]/text()").extract()[0]  # 昨日净值
             accumnav=response.xpath(".//dl[@class='dataItem03']/dd[@class='dataNums']/span[1]/text()").extract()[0] #累计净值
+
             weekrate=response.xpath(".//*[@id='increaseAmount_stage']/table//tr[2]/td[2]/div/text()").extract()[0]
             monthrate=response.xpath(".//*[@id='increaseAmount_stage']/table//tr[2]/td[3]/div/text()").extract()[0]
             threemonthrate=response.xpath(".//*[@id='increaseAmount_stage']/table//tr[2]/td[4]/div/text()").extract()[0]
@@ -36,12 +41,16 @@ class EmSpider(CrawlSpider):
             yearrate=response.xpath(".//*[@id='increaseAmount_stage']/table//tr[2]/td[7]/div/text()").extract()[0]
             twoyearrate=response.xpath(".//*[@id='increaseAmount_stage']/table//tr[2]/td[8]/div/text()").extract()[0]
             threeyearrate=response.xpath(".//*[@id='increaseAmount_stage']/table//tr[2]/td[9]/div/text()").extract()[0]
+
             category=u'净值型'
             date=datetime.datetime.now().strftime("%Y-%m-%d")
             hangyeurl=response.xpath(".//*[@class='fundDetail-footer']/ul/li[9]/a/@href").extract()[0]
-            item=EastfundsspiderItem(fundname=fundname,fundid=fundid,todayestnav=todayestnav,yestnav=yestnav,accumnav=accumnav,category=category,
-                                     date=date,weekrate=weekrate,monthrate=monthrate,threemonthrate=threemonthrate,sixmonthrate=sixmonthrate,
-                                     fromthisyearrate=fromthisyearrate,yearrate=yearrate,twoyearrate=twoyearrate,threeyearrate=threeyearrate)
+            item=EastfundsspiderItem(fundname=fundname,fundid=fundid,fundtype=fundtype,fundcompany=fundcompany,fundsize=fundsize,
+                                     todayestnav=todayestnav,yestnav=yestnav,accumnav=accumnav,
+                                     weekrate=weekrate,monthrate=monthrate,threemonthrate=threemonthrate,sixmonthrate=sixmonthrate,
+                                     fromthisyearrate=fromthisyearrate,yearrate=yearrate,twoyearrate=twoyearrate,threeyearrate=threeyearrate,
+                                     category=category,date=date,
+                                     )
             indusrtyurl = r"http://fund.eastmoney.com/f10/F10DataApi.aspx?type=hypz&code=%s&year=2017"  # 行业配置
             industryURL = indusrtyurl % fundid
             print industryURL
@@ -55,11 +64,10 @@ class EmSpider(CrawlSpider):
     def parse_hangye(self,response):
         item=response.meta['item']
         try:
-            hangye1 = response.xpath("/html/body/div[1]/div/table/tbody/tr[1]/td[2]/text()").extract()[0]
-            hangye1ratio = response.xpath("/html/body/div[1]/div/table/tbody/tr[1]/td[4]/text()").extract()[0]
-            hangye2 = response.xpath("/html/body/div[1]/div/table/tbody/tr[2]/td[2]/text()").extract()[0]
-            hangye2ratio = response.xpath("/html/body/div[1]/div/table/tbody/tr[2]/td[4]/text()").extract()[0]
-            print hangye1,hangye1ratio,hangye2,hangye2ratio
+            item['industry1'] = response.xpath("/html/body/div[1]/div/table/tbody/tr[1]/td[2]/text()").extract()[0]
+            item['industry1ratio'] = response.xpath("/html/body/div[1]/div/table/tbody/tr[1]/td[4]/text()").extract()[0]
+            item['industry2'] = response.xpath("/html/body/div[1]/div/table/tbody/tr[2]/td[2]/text()").extract()[0]
+            item['industry2ratio'] = response.xpath("/html/body/div[1]/div/table/tbody/tr[2]/td[4]/text()").extract()[0]
         except:
             pass
         print 'ok'

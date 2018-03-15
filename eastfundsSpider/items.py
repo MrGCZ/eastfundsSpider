@@ -9,13 +9,19 @@ import scrapy
 
 
 class EastfundsspiderItem(scrapy.Item):
+    #基本信息
     fundname=scrapy.Field()
     fundid=scrapy.Field()
+    fundtype=scrapy.Field()
+    fundcompany=scrapy.Field()
+    fundsize=scrapy.Field()
+
+    #nav
     todayestnav=scrapy.Field()
     yestnav=scrapy.Field()
     accumnav=scrapy.Field()
-    category=scrapy.Field()
-    date=scrapy.Field()
+
+    #收益率
     weekrate=scrapy.Field()
     monthrate=scrapy.Field()
     threemonthrate=scrapy.Field()
@@ -25,5 +31,11 @@ class EastfundsspiderItem(scrapy.Item):
     twoyearrate=scrapy.Field()
     threeyearrate=scrapy.Field()
 
+    #industry
+    industry1=scrapy.Field()
+    industry1ratio=scrapy.Field()
+    industry2=scrapy.Field()
+    industry2ratio=scrapy.Field()
 
-
+    category=scrapy.Field() #净值、万份收益
+    date=scrapy.Field()#当日日期
