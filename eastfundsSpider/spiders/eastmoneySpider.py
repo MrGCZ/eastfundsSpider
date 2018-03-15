@@ -42,8 +42,11 @@ class EmSpider(CrawlSpider):
             item=EastfundsspiderItem(fundname=fundname,fundid=fundid,todayestnav=todayestnav,yestnav=yestnav,accumnav=accumnav,category=category,
                                      date=date,weekrate=weekrate,monthrate=monthrate,threemonthrate=threemonthrate,sixmonthrate=sixmonthrate,
                                      fromthisyearrate=fromthisyearrate,yearrate=yearrate,twoyearrate=twoyearrate,threeyearrate=threeyearrate)
+            indusrtyurl = r"http://fund.eastmoney.com/f10/F10DataApi.aspx?type=hypz&code=%s&year=2017"  # 行业配置
+            industryURL = indusrtyurl % fundid
+            print industryURL
             print hangyeurl
-            request=scrapy.Request(url=hangyeurl,callback=self.parse_hangye)
+            request=scrapy.Request(url=industryURL,callback=self.parse_hangye)
             request.meta['item']=item
             yield request
         elif differetiate==u"每万份收益":
@@ -51,6 +54,14 @@ class EmSpider(CrawlSpider):
 
     def parse_hangye(self,response):
         item=response.meta['item']
+        try:
+            hangye1 = response.xpath("/html/body/div[1]/div/table/tbody/tr[1]/td[2]/text()").extract()[0]
+            hangye1ratio = response.xpath("/html/body/div[1]/div/table/tbody/tr[1]/td[4]/text()").extract()[0]
+            hangye2 = response.xpath("/html/body/div[1]/div/table/tbody/tr[2]/td[2]/text()").extract()[0]
+            hangye2ratio = response.xpath("/html/body/div[1]/div/table/tbody/tr[2]/td[4]/text()").extract()[0]
+            print hangye1,hangye1ratio,hangye2,hangye2ratio
+        except:
+            pass
         print 'ok'
         yield item
 
