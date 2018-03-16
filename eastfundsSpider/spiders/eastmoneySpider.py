@@ -34,14 +34,14 @@ class EmSpider(CrawlSpider):
             accumnav=response.xpath(".//dl[@class='dataItem03']/dd[@class='dataNums']/span[1]/text()").extract()[0] #累计净值
 
             todayrate=response.xpath(".//*[@id='gz_gszzl']/text()").extract()[0].strip("+").strip('%').replace(' ','0')
-            weekrate=response.xpath(".//*[@id='increaseAmount_stage']/table//tr[2]/td[2]/div/text()").extract()[0]
-            monthrate=response.xpath(".//*[@id='increaseAmount_stage']/table//tr[2]/td[3]/div/text()").extract()[0]
-            threemonthrate=response.xpath(".//*[@id='increaseAmount_stage']/table//tr[2]/td[4]/div/text()").extract()[0]
-            sixmonthrate=response.xpath(".//*[@id='increaseAmount_stage']/table//tr[2]/td[5]/div/text()").extract()[0]
-            fromthisyearrate=response.xpath(".//*[@id='increaseAmount_stage']/table//tr[2]/td[6]/div/text()").extract()[0]
-            yearrate=response.xpath(".//*[@id='increaseAmount_stage']/table//tr[2]/td[7]/div/text()").extract()[0]
-            twoyearrate=response.xpath(".//*[@id='increaseAmount_stage']/table//tr[2]/td[8]/div/text()").extract()[0]
-            threeyearrate=response.xpath(".//*[@id='increaseAmount_stage']/table//tr[2]/td[9]/div/text()").extract()[0]
+            weekrate=response.xpath(".//*[@id='increaseAmount_stage']/table//tr[2]/td[2]/div/text()").extract()[0].strip('%').replace('--','0')
+            monthrate=response.xpath(".//*[@id='increaseAmount_stage']/table//tr[2]/td[3]/div/text()").extract()[0].strip('%').replace('--','0')
+            threemonthrate=response.xpath(".//*[@id='increaseAmount_stage']/table//tr[2]/td[4]/div/text()").extract()[0].strip('%').replace('--','0')
+            sixmonthrate=response.xpath(".//*[@id='increaseAmount_stage']/table//tr[2]/td[5]/div/text()").extract()[0].strip('%').replace('--','0')
+            fromthisyearrate=response.xpath(".//*[@id='increaseAmount_stage']/table//tr[2]/td[6]/div/text()").extract()[0].strip('%').replace('--','0')
+            yearrate=response.xpath(".//*[@id='increaseAmount_stage']/table//tr[2]/td[7]/div/text()").extract()[0].strip('%').replace('--','0')
+            twoyearrate=response.xpath(".//*[@id='increaseAmount_stage']/table//tr[2]/td[8]/div/text()").extract()[0].strip('%').replace('--','0')
+            threeyearrate=response.xpath(".//*[@id='increaseAmount_stage']/table//tr[2]/td[9]/div/text()").extract()[0].strip('%').replace('--','0')
 
             category=u'净值型'
             date=datetime.datetime.now().strftime("%Y-%m-%d")
